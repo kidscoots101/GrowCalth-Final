@@ -1,0 +1,6 @@
+int drawable ic_dropdown 0x0
+int drawable spinner_dropdown_background 0x0
+int id dropdown_background 0x0
+int id dropdown_icon 0x0
+int layout simple_spinner_dropdown_item 0x0
+int layout simple_spinner_item 0x0
