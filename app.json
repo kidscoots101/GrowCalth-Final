@@ -4,10 +4,10 @@
     "slug": "googlefit_test",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
+    "icon": "./assets/growcalth.png",
     "userInterfaceStyle": "light",
     "splash": {
-      "image": "./assets/splash.png",
+      "image": "./assets/growcalth.png",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
@@ -23,7 +23,8 @@
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "package": "com.kidcodes.googlefit_test"
+      "package": "com.kidcodes.googlefit_test",
+      "versionCode": 2
     },
     "web": {
       "favicon": "./assets/favicon.png"

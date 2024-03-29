@@ -51,7 +51,8 @@ import {
             .add(userData)
             .then(() => {
                 AsyncStorage.setItem('userToken', JSON.stringify(userData));
-              navigation.navigate("Home");
+                AsyncStorage.setItem("userEmail", user.email);
+              navigation.navigate("Onboarding");
             })
             .catch((error) => {
               alert(error);

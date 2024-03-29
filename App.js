@@ -9,6 +9,7 @@ import MyTabs from './screens/Announcements';
 import {Image} from 'react-native'
 import Settings, { Stackz } from './screens/Settings';
 import NapfaTabs from './screens/Napfa';
+import OnboardingScreen from './screens/Onboarding';
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -24,7 +25,7 @@ function Tabs({ route }) {
         options={{
           headerShown: false,
           tabBarIcon: () => (
-           <Ionicon name="home-outline" size={30}/>
+           <Ionicon name="home-outline" size={27}/>
           ),
         }}
       />
@@ -36,7 +37,7 @@ function Tabs({ route }) {
           tabBarIcon: () => (
             <Image
               source={require("./assets/announcement-icon.png")}
-              style={{ width: 29, height: 29 }}
+              style={{ width: '30%', height: '80%'}}
             />
           ),
         }}
@@ -50,7 +51,7 @@ function Tabs({ route }) {
           tabBarIcon: () => (
             <Image
               source={require("./assets/ChallengeIcon.png")}
-              style={{ width: 29, height: 29 }}
+              style={{ width: '30%', height: '80%'}}
             />
           ),
         }}
@@ -64,7 +65,7 @@ function Tabs({ route }) {
           tabBarIcon: () => (
             <Image
               source={require("./assets/SettingsIcon.jpeg")}
-              style={{ width: 25, height: 25 }}
+              style={{ width: '25%', height: '70%'}}
             />
           ),
         }}
@@ -81,6 +82,8 @@ export default function MyStack() {
       <Stack.Screen name="Login" component={Login} options={{headerShown: false}}/>
       <Stack.Screen name="Home" component={Tabs} options={{headerShown: false}}/>
       <Stack.Screen name="Register" component={Register} options={{headerShown: false}}/>
+      <Stack.Screen name="Onboarding" component={OnboardingScreen} options={{headerShown: false}}/>
+
     </Stack.Navigator>
     </NavigationContainer>
   );

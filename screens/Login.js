@@ -25,6 +25,7 @@ const Login = () => {
                 const user = userCredentials.user;
                 console.log("Logged in with:", user.email);
                 await AsyncStorage.setItem("userToken", user.uid);
+                await AsyncStorage.setItem("userEmail", user.email);
                 navigation.replace("Home");
             })
             .catch((error) => alert(error.message));

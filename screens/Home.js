@@ -36,67 +36,67 @@ const Homes = () => {
       },
     ]);
   };
-  // const [steps, setSteps] = useState(0);
-  // const options = {
-  //   scopes: [
-  //     Scopes.FITNESS_ACTIVITY_READ,
-  //     Scopes.FITNESS_ACTIVITY_WRITE,
-  //     Scopes.FITNESS_BODY_READ,
-  //     Scopes.FITNESS_BODY_WRITE,
-  //   ],
-  // };
-  // GoogleFit.authorize(options)
-  //   .then((authResult) => {
-  //     console.log("🚀 ~ .then ~ authResult:", authResult);
-  //     if (authResult.success) {
-  //       console.log("🚀 ~ .then ~ AUTH_SUCCESS:");
-  //       // Call getStepCounts initially
-  //       getStepCounts();
+  const [steps, setSteps] = useState(0);
+  const options = {
+    scopes: [
+      Scopes.FITNESS_ACTIVITY_READ,
+      Scopes.FITNESS_ACTIVITY_WRITE,
+      Scopes.FITNESS_BODY_READ,
+      Scopes.FITNESS_BODY_WRITE,
+    ],
+  };
+  GoogleFit.authorize(options)
+    .then((authResult) => {
+      console.log("🚀 ~ .then ~ authResult:", authResult);
+      if (authResult.success) {
+        console.log("🚀 ~ .then ~ AUTH_SUCCESS:");
+        // Call getStepCounts initially
+        getStepCounts();
 
-  //       // Set interval to fetch steps every 5 seconds
-  //       const intervalId = setInterval(getStepCounts, 5000);
+        // Set interval to fetch steps every 5 seconds
+        const intervalId = setInterval(getStepCounts, 5000);
 
-  //       // Clean up interval on component unmount
-  //       return () => clearInterval(intervalId);
-  //     } else {
-  //       console.log("🚀 ~ .then ~ AUTH_DENIED:");
-  //     }
-  //   })
-  //   .catch((error) => {
-  //     console.log("🚀 ~ Homes ~ error:", error);
-  //     // dispatch("AUTH_ERROR");
-  //   });
-  // const date = new Date();
-  // date.setHours(0, 0, 0, 0);
+        // Clean up interval on component unmount
+        return () => clearInterval(intervalId);
+      } else {
+        console.log("🚀 ~ .then ~ AUTH_DENIED:");
+      }
+    })
+    .catch((error) => {
+      console.log("🚀 ~ Homes ~ error:", error);
+      // dispatch("AUTH_ERROR");
+    });
+  const date = new Date();
+  date.setHours(0, 0, 0, 0);
 
-  // const getStepCounts = async () => {
-  //   try {
-  //     const opt = {
-  //       startDate: date.toISOString(), // required ISO8601Timestamp
-  //       endDate: new Date().toISOString(), // required ISO8601Timestamp
-  //       bucketUnit: BucketUnit.DAY, // optional - default "DAY". Valid values: "NANOSECOND" | "MICROSECOND" | "MILLISECOND" | "SECOND" | "MINUTE" | "HOUR" | "DAY"
-  //       bucketInterval: 1, // optional - default 1.
-  //     };
-  //     console.log("🚀 ~ readData ~ opts:", opt);
-  //     const res = await GoogleFit.getDailyStepCountSamples(opt);
+  const getStepCounts = async () => {
+    try {
+      const opt = {
+        startDate: date.toISOString(), // required ISO8601Timestamp
+        endDate: new Date().toISOString(), // required ISO8601Timestamp
+        bucketUnit: BucketUnit.DAY, // optional - default "DAY". Valid values: "NANOSECOND" | "MICROSECOND" | "MILLISECOND" | "SECOND" | "MINUTE" | "HOUR" | "DAY"
+        bucketInterval: 1, // optional - default 1.
+      };
+      console.log("🚀 ~ readData ~ opts:", opt);
+      const res = await GoogleFit.getDailyStepCountSamples(opt);
 
-  //     console.log("🚀 ~ readData ~ rees:", res);
-  //     setSteps(res?.[2]?.steps[0].value || 0);
-  //   } catch (error) {
-  //     console.log("🚀 ~ readData ~ error:", error);
-  //   }
-  // };
+      console.log("🚀 ~ readData ~ rees:", res);
+      setSteps(res?.[2]?.steps[0].value || 0);
+    } catch (error) {
+      console.log("🚀 ~ readData ~ error:", error);
+    }
+  };
 
-  // useEffect(() => {
-  //   if (GoogleFit?.isAuthorized) {
-  //     getStepCounts();
-  //     // const interval = setInterval(getStepCounts, 5000); // Call getStepCounts every 5 seconds
-  //     // return () => clearInterval(interval); // Clean up the interval on component unmount
-  //   }
-  // }, [GoogleFit]);
-  const stepCount = 0 
-  const finalPoints = 0
-  const distance = 0
+  useEffect(() => {
+    if (GoogleFit?.isAuthorized) {
+      getStepCounts();
+      // const interval = setInterval(getStepCounts, 5000); // Call getStepCounts every 5 seconds
+      // return () => clearInterval(interval); // Clean up the interval on component unmount
+    }
+  }, [GoogleFit]);
+  const finalPoints = steps/1000
+  const dist = steps / 1300;
+  var distance = dist.toFixed(2)
   const [Quote, setQuote] = useState("")
   const [Author, setAuthor] = useState("")
   const getQuote = () => {
@@ -110,6 +110,41 @@ const Homes = () => {
   useEffect(() => {
     getQuote();
   }, []);
+
+  async function UpdatePoints() {
+    const user = await firebase
+      .firestore()
+      .collection("users")
+      .doc(auth.currentUser.uid);
+
+    const data = (await user.get()).data();
+
+    const newPoints = Math.floor((data.steps + 1) / 1000);
+    console.log(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>", newPoints);
+
+    await user.update({ steps: data.steps + 1, points: newPoints });
+    if (newPoints > data.points) {
+      const house = await firebase
+        .firestore()
+        .collection("HousePoints")
+        .doc(data.house);
+
+      house.update({ points: (await house.get()).data().points + 1 });
+    }
+  }
+  useEffect(() => {
+    AsyncStorage.getItem("stepCount")
+    .then((value) => {
+      if (value !== null) {
+        // Parse the saved value and update the step count state
+        setSteps(parseInt(value, 10));
+      }
+    })
+    .catch((error) => {
+      console.error("Error retrieving step count: ", error);
+    });
+    UpdatePoints();
+  }, [steps]);
   return (
     <SafeAreaView style={{ backgroundColor: "#FFFFF" }}>
       <ScrollView>
@@ -190,7 +225,7 @@ const Homes = () => {
                     }}
                   >
                     <Text style={{ fontSize: 30, fontWeight: "bold" }}>
-                      {stepCount}
+                      {steps}
                     </Text>
                     <Text>steps</Text>
                   </View>
@@ -245,7 +280,7 @@ const Homes = () => {
                 <Text
                   style={{ textAlign: "center", fontSize: 25, marginTop: 23 }}
                 >
-                {(stepCount / 1000) > 1 ? "House Points" : "House Point"}
+                {(steps / 1000) > 1 ? "House Points" : "House Point"}
                  </Text>
               </View>
             </View>

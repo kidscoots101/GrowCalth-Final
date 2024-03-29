@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Text,
   View,
@@ -43,6 +43,7 @@ const Settings = (props) => {
             .then(() => {
               navigation.replace("Login");
               AsyncStorage.removeItem('userToken')
+              AsyncStorage.removeItem('userEmail')
               .then(() => {
                 navigation.replace("Login");
               })
@@ -61,7 +62,23 @@ const Settings = (props) => {
 
   const navigation = useNavigation();
 
-  const userEmail = auth.currentUser?.email
+  // const userEmail = auth.currentUser?.email
+  const [userEmail, setUserEmail] = useState('');
+
+  useEffect(() => {
+    const getUserEmail = async () => {
+      try {
+        const userEmailFromStorage = await AsyncStorage.getItem('userEmail');
+        if (userEmailFromStorage !== null) {
+          setUserEmail(userEmailFromStorage);
+        }
+      } catch (error) {
+        console.error('Error retrieving user email from AsyncStorage:', error);
+      }
+    };
+
+    getUserEmail();
+  }, []);
 
   return (
     <SafeAreaView style={{ backgroundColor: "#f3f2f3" }}>
@@ -140,7 +157,7 @@ const Settings = (props) => {
         fontWeight: 'bold',
         fontSize: 30,
       }}>
-        {userEmail[0].toUpperCase()}
+       {userEmail ? userEmail[0].toUpperCase() : 'Loading...'}
       </Text>
     </View>
     <View style={{
@@ -150,7 +167,8 @@ const Settings = (props) => {
       <Text style={{
         fontWeight: '900',
         fontSize: 18,
-        marginBottom: 4, // Add some space between the two Text components
+        marginBottom: 4, 
+        width: '90%'
       }}>
         {userEmail}
       </Text>
