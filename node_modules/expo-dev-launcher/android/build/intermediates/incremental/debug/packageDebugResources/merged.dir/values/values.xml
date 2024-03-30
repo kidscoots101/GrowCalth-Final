@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="dev_launcher_backgroundColor">#F8F8FA</color>
+    <color name="dev_launcher_colorAccentDark">#FFFFFF</color>
+    <color name="dev_launcher_colorPrimaryDark">#011A2D</color>
+    <color name="dev_launcher_errorLogButton">#66FFFFFF</color>
+    <color name="dev_launcher_errorMessage">#FF0000</color>
+    <color name="dev_launcher_primary">#1B1F23</color>
+    <color name="dev_launcher_secondaryBackgroundColor">#F0F1F2</color>
+    <color name="dev_launcher_white">#FFFFFF</color>
+    <string name="dev_launcher_error_details" translatable="false">This development build encountered the following error.</string>
+    <string name="dev_launcher_error_header" translatable="false">There was a problem loading the project.</string>
+    <string name="dev_launcher_go_to_home" translatable="false">Go to home</string>
+    <string name="dev_launcher_reload" translatable="false">Reload</string>
+    <string name="splash_screen_text" translatable="false">DEVELOPMENT CLIENT</string>
+    <style name="Theme.DevLauncher.ErrorActivity" parent="Theme.AppCompat.Light.NoActionBar">
+    <item name="android:statusBarColor">@android:color/transparent</item>
+    <item name="colorPrimary">@color/dev_launcher_primary</item>
+    <item name="colorPrimaryDark">@color/dev_launcher_colorPrimaryDark</item>
+    <item name="colorAccent">@color/dev_launcher_colorAccentDark</item>
+    <item name="android:windowBackground">@color/dev_launcher_backgroundColor</item>
+  </style>
+    <style name="Theme.DevLauncher.LauncherActivity" parent="Theme.AppCompat.Light.NoActionBar">
+    <item name="android:windowContentOverlay">@null</item>
+    <item name="android:windowNoTitle">true</item>
+    <item name="android:windowIsFloating">false</item>
+    <item name="android:backgroundDimEnabled">false</item>
+    <item name="android:windowAnimationStyle">@null</item>
+  </style>
+</resources>
